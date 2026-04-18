@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #4a4a6a;
+    --ink-muted: #8888aa;
+    --surface: #fafaf8;
+    --surface-raised: #ffffff;
+    --accent: #2d5be3;
+    --accent-light: #eef1fc;
+    --accent-mid: #6b8ef0;
+    --success: #1a7a4a;
+    --success-light: #e8f5ee;
+    --danger: #c0392b;
+    --danger-light: #fdecea;
+    --warning: #b45309;
+    --warning-light: #fef3e2;
+    --border: rgba(26,26,46,0.1);
+    --border-strong: rgba(26,26,46,0.2);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 52px 32px 48px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .progress-bar-wrap {
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .progress-steps {
+    display: flex;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .step-tab {
+    flex: 1;
+    padding: 14px 8px 12px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    border-bottom: 2px solid transparent;
+    cursor: default;
+    white-space: nowrap;
+  }
+  .step-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .step-tab.done { color: var(--success); }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+    transition: all 0.2s;
+  }
+  .step-tab.active .step-num { background: var(--accent); color: #fff; }
+  .step-tab.done .step-num { background: var(--success); color: #fff; }
+  .container { max-width: 680px; margin: 0 auto; padding: 40px 24px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .field { margin-bottom: 24px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+  }
+  .field label span { color: var(--accent); }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--surface-raised);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(45,91,227,0.12);
+  }
+  .field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 520px) { .row-2 { grid-template-columns: 1fr; } }
+
+  /* Audio recorder */
+  .recorder-card {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .passage-box {
+    background: #f0f2f9;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .recorder-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .rec-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .rec-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-record { background: var(--danger); color: #fff; }
+  .btn-record:not(:disabled):hover { background: #a93226; }
+  .btn-stop { background: var(--ink); color: #fff; }
+  .btn-stop:not(:disabled):hover { background: #2d2d4e; }
+  .rec-dot { width: 10px; height: 10px; border-radius: 50%; background: currentColor; display: inline-block; }
+  .rec-status { font-size: 13px; color: var(--ink-soft); flex: 1; min-width: 120px; }
+  .rec-status.recording { color: var(--danger); font-weight: 500; }
+  audio { width: 100%; margin-top: 14px; border-radius: var(--radius-sm); }
+  .download-hint {
+    font-size: 12px;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--warning-light);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(180,83,9,0.15);
+    color: var(--warning);
+    line-height: 1.6;
+  }
+
+  /* Typing test */
+  .typing-card {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .typing-passage {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    user-select: none;
+  }
+  .char { transition: color 0.05s; }
+  .char.correct { color: var(--success); }
+  .char.incorrect { color: var(--danger); text-decoration: underline; }
+  .char.current { color: var(--accent); border-bottom: 2px solid var(--accent); }
+  #typing-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--surface-raised);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: none;
+    min-height: 100px;
+  }
+  #typing-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,91,227,0.12); }
+  #typing-input:disabled { background: var(--surface); cursor: not-allowed; }
+  .typing-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-val { font-size: 22px; font-weight: 600; color: var(--ink); display: block; }
+  .stat-label { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+  .stat-card.highlight { background: var(--accent-light); border-color: rgba(45,91,227,0.2); }
+  .stat-card.highlight .stat-val { color: var(--accent); }
+  .typing-timer { font-size: 13px; color: var(--ink-soft); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+  .typing-result-banner { display: none; margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; }
+  .typing-result-banner.show { display: block; }
+  .typing-result-banner.great { background: var(--success-light); color: var(--success); border: 1px solid rgba(26,122,74,0.2); }
+  .typing-result-banner.good { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(45,91,227,0.2); }
+  .typing-result-banner.average { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(180,83,9,0.2); }
+
+  /* Buttons */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-primary {
+    padding: 13px 32px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #1e46c7; transform: translateY(-1px); }
+  .btn-secondary {
+    padding: 13px 24px;
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--surface-raised); color: var(--ink); }
+  .btn-submit {
+    padding: 13px 40px;
+    background: var(--success);
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { background: #145e38; transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .required-hint { font-size: 12px; color: var(--ink-muted); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success */
+  .success-screen { display: none; text-align: center; padding: 60px 24px; }
+  .success-screen.show { display: block; }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--success-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 30px; font-weight: 400; margin-bottom: 12px; }
+  .success-screen p { font-size: 15px; color: var(--ink-soft); max-width: 420px; margin: 0 auto 28px; line-height: 1.7; }
+  .audio-reminder {
+    background: var(--warning-light);
+    border: 1px solid rgba(180,83,9,0.2);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    text-align: left;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .audio-reminder h4 { font-size: 14px; font-weight: 600; color: var(--warning); margin-bottom: 6px; }
+  .audio-reminder p { font-size: 13px; color: var(--warning); line-height: 1.6; }
+  .error-banner {
+    display: none;
+    background: var(--danger-light);
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--danger);
+    margin-top: 16px;
+  }
+  .error-banner.show { display: block; }
+  .timer-pulse { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+</style>
+</head>
+<body>
+
+<div class="hero" style="padding:0;">
+  <div style="background:#1a1a2e;padding:28px 32px 24px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMSERUTERMWFhUWFhMZFhgWFhUYFxcYGBgZHRYYHRcYHSggGhooHRcYITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGxAQGy4mICYtMC4wMDItLzIyLTMvLTIyLS0tLS8vLS81LS8vLy0tLS0tLS0tLTUtLS0tLS0tLS0tLf/AABEIAJ8BPgMBEQACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAABAUDBgcBAgj/xABMEAACAQIEAgUHCAUJBwUAAAABAgADEQQFEiExQQYHE1FhFCJxgZGhsTI1QlJicrPBM5KisvAVIyVDc3SCwtE0hJPE0uHxFiREVIX/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAwQFAgEG/8QANxEAAgIBAgMFBQcEAgMAAAAAAAECAxEEIQUSMRNBUWGBM3GRwfAUMjSCobHRIiNCUhVEJGJy/9oADAMBAAIRAxEAPwDuMAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEA8ZgOJtAPYAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgGPEV1RSzmwHEwDXhTqY46iWpYcX0W2eoeTeC/GAZ8uzB6LjD4rj/V1Po1B+Td4/8AMAvoAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAYsTiFpqWcgAczAKSjh2xjCpVBWgDdKZ41O5m+z4c/RxAvwIBGzHAJXQpUFxxBGxU8mB5GAVeCxj4dxQxJup/RVeTfZPc3hAL4QBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQDDi8UtJC7mwEApcPhHxbCrXBWkN6dI/S7mcd3h7YBTHrRwYNtFf9RP8Armh/xl3kUP8AkavM2zJ8yTE0UrUr6HFxfiLEgg25ggj1SlZW65OEuqLldinFSRV9JemGHwLolYOWdSwCBTYA2ubsOJvb0GTUaSy5Nx7iK/VQpaUiHlPSjC5mz4ZUqfILnWFFgGUXBDEhgWFp7fo7KY80sHNOrhbLljkm4PGPhXFHEG6E2pVeR+y3c3x5eFUtGwAwBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAI+OxiUkLubAQCpweDfEOK2IFkG9Kkfc7jv7h7YBfQD84ZfgGr1HRflBKrgd+hS1vYDPq52KEU35L4nzEa3OTS8zo/U5mmqlVwxO6EVE+62zAeAYA/wCOZHFKsSU137Gpw2zMXDwNU6RVWzDM6ujdV1hTyFOipufQSGP+KXqEtPp1n6bKdzd97x9YLDqc/wBuqf3d/wASlI+KeyXv+TO+G+1fu+Z13F4ZaiFKihlbiD/Gx8Zgm4UuGxD4RxSrEtSY2pVDy+w3cfj7gBfg34QD2AIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIBGx+NSiheobAe+AVmAwT13FfECwG9Kkfo9zMPrdw5engBeQBAOH9WY/pNPRW/cafQ6/8P8DC0Pt/iYMdUqZXmNcUtrCqqd2iqt6fp03U+lJ7BLVUR5vrBzNvTXS5frJedWeVf+3xmJI/q3pJ+pqf/J7DK/ELf64QXjn+CfQV/wBEp+hG6nP9uqf3d/xKU74p7Je/5M44b7V+75nZJhG2YsTh1qIUdQysLEGAUdGs+DcU6pLUGNqdQ7lSeCN+R5wDYFa4uIB7AEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQDBjcSKaM5BNhwHGAU+UYbygriaxDc6SA3VLcz3v8PTAL+AIAgGm9HegFPCYkYhazsQH80qoHnAjl6Zev18ra+RopU6KNU+dMzdK+g9LHVVqtUamwQKdIBuASRx57mc6bWyoi4pZOtRo43S5my1yjIUw+E8lRiV0uCxtqJe9z7/dILb5WWdoyWulQr5EVPRPoPTwNY1Uqu5NMpZgoFiym+33ffLGp1sr48rWNyGjRxplzJm2ykXBAMeIoK6lHAZWFiDwIgGvUMQ2Errhy3aU33p83QX4HvHcYBssAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAPCIBQYnCvhXNXDjVTY3q0v8y9zfH2EAXOCxaVUD0zdT7u8Ecj4QDPAEA0/o9mFV8QqvUYiz7E7bAz5nh2rus1KjOTa3NzXaeqFHNGKT2Pekea1BWKU3KhQAbHix3PxE94nrrI38lcsJdceJ5oNJXKrmms5LPJce1TCuSxLoHBPPhdT7D7pf0OplbpZNv+pZX8FPV0KvUJJbPBA6K46rUrEO7MNBNied1398p8J1N1tzU5NrH8FriNFddacI43Nrn0RjCAVec5t2VqdMa6z/ITkB9ZrcF+PtIA+cmyjsialQ66z7s5+A7h4QC2gCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgAwChxmDfDOa2HF1P6Wl9b7S9zfx6ALbA4xKyB6ZuD7QeYI5HwgEgwDQMjrinW1ngq1D+ydp8boLVVfzvuUj6XWQdlPKu9oz5Hg/KKtRn4WYn7z3A/M+qTaCj7XdKU/B/F9PgRay37PVGMPL9D4ybEGk9Wm22pHU/eUG35j1znQ2umc6pd6a9UdautWwjZHuafoyR0M/Tt/Zn95ZLwT27/+fmiPivsl7/kzc59SYJU5xmxpkUqI112+SvJR9ZvDw5++AfWT5T2V3qHXVfd3PG/cO4coBaQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQCixuBeg5r4YXv8ApafJx3juYd8As8vxyVkD0zccCDsVPNSORgHPCjdx9hnwThPL2fwPrlKOFubn0VwmihqI3clvVwX4X9c+p4TR2eny+st/4Pn+I2892F0W38lH0owZSvqUGzgHbvGx/I+uZPFtPKGo54raW/r3mjw65Sp5X3GXocpFdrgj+bPL7SzvgsWr3ld3zOeKNOpY8fkXWcZsUYUaA1125ckB+k35Dn6J9OYRkybKhRBZjrqvu7niTALOAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgCAIAgFFmOXvSfyjDfK/rKf0ag/I9x5e0QCyy3HpXTWnoZT8pW5qRyMAlwBAKfN80YN2GHGqs3rWmD9JvHuH8EDPk+VLQX6ztu7ncsTx3gFjAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEApMzy90fyjDbP8ATT6NRe4+PceUAn5XmKV01JsRsyn5SnuI/i8Ag5tmjl/J8NvVPym4rSHeftdw9Z5AgS8oytaC7bsd3Y7lieJJMAnwBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQClzTJmZ+1w79lVOzEcGB43FoBMynLEoJpXcndmPFjzJMAnQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEAQBAEA1XrLxlSlgGak7I2umNSEhrE7gEbj1S5oYRnclJZ6lTWzcam08HNOivSjEpjKBq4ms1M1FVw9R2WzG1yGJG1738JranS1up8sVn3GVp9TNWrmk8e83nrWz6rh6dGnQdkaozEsps2lANr8rlh+rM7h1EbJNzWUjQ190q4pRe7Nd6tc8xNXHhKteq6lKl1d2YbC4Nidj6Ja19Fcacxik8lbQ3WTtxJtmLrGznEpmD06WIrIoWkFVKjqN1B4KRvc8Z1oaa3QnKK7znW22K7EWyenRHOj/80j04qv8AkJF9r0n+n6Il+y6r/f8AVlz0h6M4+thcLTTEA1aQbtWNR11kgWOoC7WsRc7m95Xp1FMLJScdn02J7tPdKuMVLddTmejF+U+TdpU7XtOzt2rW1arcb8L85r5p7PtMLGM9DK/u9p2eXnOOpueLyjGYHLMWa9YlnbD6NFR2KjWA/nGxF7geqUI203aiHLHx7kX5V200S5n4FH0TyTF45ahpYpkFPSPOqVdy17cDsNuMsam6qhpOGc+SK+nqtuTal0LHoN0jxNDGjCYh2dGdqZDsWKOLgaWO9tQtbhvItXp6509rBYfUk0t9kbezm89xY9aPSurTqeS0HKWUNVZTZjq4KDxAtubcbj1xcP0sZR7Saz4Euu1Movkjsa5mXR3HYGjTxZqlSSuoK7a6Zb5Orke48dzbeWq9RRdN14/TqVp03VQVmTpXQHpC2Nwuqp+kpsUciw1GwIa3K4PtBmVrNOqbMLo9zS0l7try+qOS5BTxOMxK0VxDhn1Es1R7bAsTsdztNu51018zitvJGRT2ls+VSLHGZhj8qxXZtXZ7aW0l3enUU+DcOBG24tIY10aqvmUcEsrLtNZhyybh1idL2o0aKYZtL10FQsOKUza1vEm+/LSfAyjodIpzbn0W3qXNbqnCKUOrNNPRvGjB/wAodq1ra7dpU7XRfapf9rjw38Jf+0U9r2PL5dFgpdhd2fa5/k3rqy6UVMWj0q51VKQUhtruhuN7cwRa/iOcztfpo1SUodGX9DqXanGXVGkpmNb+WbdrUt5dptra2nttOm17WttaaDrh9kzhfd+RQVs/tOM/5fM7cJ8+bxxKtmVb+WrdrUt5aFtra2ntdOm17W07Wm+qofZM4X3fDyMKVk/tOM/5fMmdOMhx1F6+KasTRNUkaar6lV28wadgALhdpxpL6JqNfLvjwRJqqboNz5ts+JUdG8lx2ODmhWICWBL1qgFzewFrnlJ77qKWuaPXyRDRVddlxf6nQ+n+YPhMtWnrPauKdLWCQbgXdr8dwpH+KZWirjbfnGy3waOrsddOO/oah1X57UXGilUquyVVZQGYkaxup34GwYeuX+IUR7Lmit0UtDfLtOWT6m7daOIdMAxRmUmpTF1JBtfhcTP4fFSuSaL+uk40to0nqz6SVExgpVajslYaRrckK43UjUdr2K7cbjumhr9NF180VuihodRJWcsn1LTN8bUHSCmgqOF1URp1HTY0xcWvaxuZBVCL0TeN9/3J7Jy+1pZ22OoTJNQQBAEAQBAEAQBAEAQDTutf5ub+0pfGXuHe3XqUuIexZzHMsAFy/B10ABZsQjtzLB7079+wPsmvXPN84Py/bcy5wxTCa8y6fGLm+aYYFSKYRA6nh5gZ6g25E+bf0SvyPS6eXjn99kTcy1N8fD6yYOq9QMzAHALWt7J3xB50/wADnQLF/wATD1nn+kqv3aX7iz3h/wCHXqc6/wBu/QvsD0tzgugOELAlQb4eqtwftXsPTwErT0ukSbU/1RZhqdS2k4/ozqkxzWOIr8/f76fxDPoH+C/KYX/c/MdC60fmyt96j+KkzOH+3j6/saWu9gzmHRXpRiMElXsKauraSxZWIQi4BupFr35zX1Omrua5ngydPqJ1RfKslr1b5S+LxpxVRrik+tzzeo9yNuW/nX8APRDr7Y1VdnHv29PrYm0Vbst7R937lf063zWtq4dpSHq0J+Uk0e2mWPB/Mj1X4h+9HUOshQctxF+6mR6RUS3vmRoXi+P13GrrMdhL67zUephzqxQ5aaJ9fn/x6pd4qvu+vyKXDf8AI0fo5m7YTEJXRQxXUNJvY6gQeHpmjfSrYODKFFrqmpIs8Z5Xm2L1LS84hV2DBKajmWPLcnx5DlIYOrSV4yTS7TU2ZwTOtKj2eLpUx8mnhaKr6FLiccOfNW34tnevWLEvJHTcQo/kphy8jP4Mx1+I/N8zVaXYY/8AX5HOOqAny9vGhUv+vTmtxP2K9/8AJl8O9q/cVyfPX/6H/MSV/hPyfIiX4r83zO7ifOH0Jwmv89H+/j8efRx/Cfl+R8/L8V+b5nS+tH5sq/eo/irMjh/4hev7GprvYMpOpf8ARYj79P8AdMs8V+/H3EHDPuS95V9ZeL8ozGjhb2VDTU3NhqqlSxv4Lp98l0EezolZ4/Ii1s+e6Nf1uV/TwLhMzWrh9AAFGooS1gV2sQOF9Hvkujzbp3GXmiPV4qvUo+83PrOxAqZWHXdXeiw9Dbj4yhw9OOow/Mva5p0ZXkc9xmSdnl+Ex1IkMzutQ8bMtR+zcd2y29IHfNON3NdOqX1tuZjq5aY2x+tyfgs3GLzjD1wuks1AMPtKgDW8Lg28JHOl1aWUPf8AuSwuVupjL3Ha5gG4IAgCAIAgCAIAgCAIBp3Wv83N/aUv3pe4d7depS1/sWaqMD2vR0MONKo9Qeqoyt+yxPqlzn5ddjx2/QqcnNo/duZOprAg1a9cj5CqinldyS3rsq/rTzik8RjD1HDIbuRVdVw/pIfcrfCT8Q/D/Aj0Ht/iYus5rZnUPcKP7iz3h6zp16nGvf8Af+BuCda+G50K3q7M/wCYSj/xdniv1L3/ACVfgzc8lzNMVQSvTBCuLgMLEWJBBt4gzPtrdc3B9xersVkVJd5x5fn7/fT+IZuv8F+Uxf8At/mOh9aR/oyt96j+KkzOH+3j6/saWu9izWuqfCLWw2MpP8mppRvQyODv37y1xKThZCS7v5KvD4KVcovvKLoJmLYHMexq7B2NGoDfZtVka33rD0MZZ1lavo513blfSTdN3K/cT+tnI3TEeVKCadQKGYfQdRYX7gQBY94Mi4benDs31RJxClqfaIjdKOn5xeDFDstLMUNVtXmnSQRpHiQDvw4b8Z3p9B2VvPnbuOL9b2tfJjfvNz6r8kfDYRnqrpes2qxFmCAWQEcj8o2+1KHELlZalHoi7oaXXW2+rNA6sADmVG44CqfR/NtNPiD/ALD9DP0K/vL1O6WnzpvnNOt3IXfRi6YLBF0VQPoqCSr+jzmB7tvGavDL1HNcu/oZfEaG8WL1KN+sBjl3knZntOz7I1LjT2drXtx1advf4SyuHrt+0ztnOPMgeufY9njfoX3VFkToKmKqKVDqEpXFiVvdm9BIW3fYytxO9SarT6dSfh1LinN9/Q0XM8Z2OZ1aoFzTxdR7E2vprE2vy4TRrhz6dR8Y4/Qz5y5L3LwfzN+yfrQFavSpHDaRUdU1CrqsWIANtAvue+ZtvDHCDlzdPI0auIc8lFx6+ZpuI+ez/fx+OJfi/wDxPy/IpS/Ffm+Z0vrR+bKv3qP4izI4f+IXr+xqa72LKDqeqhKGKdtlVlJPcAhJ90s8UWbIpEHDtoSZqmSZU2bY6sTU0BtdUsV1EAsAq2uN7EDjwWXbbVpaorGe4p11PU2vfzJXTHoIcBRWsK3aAuFI7PRa4JBvqO21vWJxpdd20+VrHqdanROqPMnkmYjMe26PhTuaNZKZ9AN1/ZZR6pxGvk1vvWSR2c+kx4PBtPRHK1xORpQfg61gD3HtnKN6iAfVKeptderc13Y/YtaatWaVRffn9znHRGi1PM6COLMlfSw7mUkEe0TV1UlLTykujRm6aLjek/E79Pmj6EQBAEAQBAEAQBAEAQDDjMJTqoUqorobXVgGBtuNj4zqMnF5i8M5lFSWGj4oYCklPskpotOxGgKAljfUNPDe5v6Yc5OXM3uFCKXKlse4LBUqK6KNNKa3J0ooUXPE2HOJzlJ5k8iMIxWIrBiwuVUKbmpTo00dr6mVFDG5ubkC+53nsrZyWG20eRrhF5S3MeNyPDVm11qFJ2sBqZFJsOAuRPY3WQWIyaR5KquTzJIj/wDpXA//AFKH/CT/AEnX2q7/AGfxOfs9X+q+BaYegtNQiKFVRZVUAADuAHCRNtvLJUklhHnk1PVr0Lq+tpGr28Y5njA5VnODJUQMLMAQeIIuD6jPM4GE9j5o0EQWRVUdygAe6ett9Qkl0PhsJTLayiFtvO0jVtw3teOZ4xkcqznBlZQRYi47jPD3qQ6GT4dG1JQpK31lpoD7QJ27ZyWG38SNVQTykibOCQxU8LTUllRQx4kKAT6xPXJtbs8UUu4zTw9PIBBGS4bXr8no6+Ors01X772vJO2njHM8e8j7KGc4WfcTpGSEepgaTElqSEniSikn1kTpTktkzlxi+4U8DSU3WmgI4EIoI9YEOcn1YUYroj7OFp6tehdX1tI1e3jPOZ4xk95VnODJUQMCGAIPEEXB9U8WwwmfFGgiCyKqjuUAD2Cett9Qkl0PKGGRPkIq346VAv7Icm+oSS6H3VpqwswBB4ggEewzxPHQNJ9T4XC0wugIuk8V0jSfVa095nnORyrGMGRFAAAAAHAAWA9U8yDH5NT1a9C6vraRq9vGe8zxgcqzkzTw9EAQBAEAQBAEAQBAEAg53q7CpoJDBSQQbHbc2I8AZV1vN9nnydcE+m5e2jzdMlBmmav5NQKMQzAliDudFgb+kzG1Wus+y1Sg93u/Tr+ppUaSHb2KS2XT1LM4tqmJoqrEJ2RqMBwOrYX900O3lZqq4xe3LzPzz0KfZRhRNyW/NggYnMagxPaAnsVqCkRfzb28649pv4Slbq7Vqu0T/tqXL/P15FqvT1ujk/za5iT0qrOpohXZAzEEqSPq77d1zLHFrJx7OMZNZeNvQh4fCMudyjnCPjBVnp4sURVaqhW51G5U2J4+ofrTiiyyrWdgpuUWs793r9dTq2ELNN2rjyvPd3kWm5qV6wqYl6YVyFAfSCLkbXNtrD2yCLduosU7nHD23x3k0kq6YOFallb7ZJWeO1FKAFVyNfnMW3I47kcRvLGvlLT11JTf3ll56rzINJGN07G4rpsj7x2P1YqgtOpdbnUFbY34XtsZ1qNTzauqFctt84Z5TRjT2SnHfuyfGIapiMS9IVGppTH0TYk7f6+6c2O3VaqVKk4xiu7rk6goUUKxxTcvE9ynHVDTxCOxLUg1m58GHxXj4xo9TZKu2uby4Z3+P8Hmpogp1yisKWNjJgK7nAFyxLBKvnE77FrbzvT2zfD3NvfD3+JzdXFazlS2ytvgYMyx1RcJRKsQXCB34kDT39575DqdTbDR1yT64y/QkoorlqZxa6ZwiXk1Fg2pMQatIjgxuwb08vRLWirkpc0LeeHnu8kGqmmuWVfLIq6LmpXrCpiXphXbSA+kEXI2ubbWG3jM+D7W+xWXOOHtvguSSrpg4VKWVvtk2bA0dCBdbP8AaY3Jvvxm9RXyQUeZvzZk2T55N4S8ka/n+KIr6XquiCnqXsyQdW9r28R8Ji8QvcdRyTm4x5crHj5mno6lKnmjFOWcPPgXmUs5op2vy7b9/hfxtaa2kdjpj2v3sbmfqFBWS7PoV3Saq4NFUdk1vYlTbjYfnKPFLLIuuMJNZljYtaCEHzyks4RipYirQxKUnqGolTgW4g+n0j3ziNt2m1UaZy5oy6Z6o6lCu+h2RjyuPgRqzl8VVV8Q9JVtaz6RwG25tIJt2auyE7XFLGN8dyJYxUNPCUa1JvyySc4ZqNGkEqu16i+cWuSCCbX5jhJ9a56emtQm3mS3zu0RaVRutk5RS/p6FvmrFaFUg2IRyCOINjNHVycaJyXVJ/sUtPFO2KfiihrYuotHCVdbW1APufOF+ffsp498yJ3Wxoot5n1SfnnxNGNUJW3Q5V0yvL3FjWrs2MVFJCpTZnF9iTsL9/Iy/O2ctYoReyi2/XoVY1xWmc2t28L0KXJiaoJqYuojXsF7SxPjufh3TK0Wb03Ze089M4/cv6rFTShUmsdcE7N2cV6FEVnRSti2qxPHcnvNvfLetc1fVSptJrd5/cr6ZRdNljgm89Bl1SoatbD9szqEOl7+cp2+l6/dGmlY7rNPzuSxs+9eovjBVwu5cPPTuZEo5nVdBhgWFbWVL34KCbm/G4/KV69ZdZBaZN9pnDfgkTz01UJu/bkxlLzNtprYAXvYDc8TPoorCSMZvLPqenggCAIAgCAIAgCAIB8utwQec8ksrB6njc1To9gWLVUqA6VV6Yvw84729l/ZPnuHaaXNZXNbJOK9Xvg2NbfFRhKHVtP4I+ujutKdaq4YlECrcG/mgkqPC9p1w1TrrstmnssL07kc67knOFccbvL9SOcrxJwxuRpP84Usdd/Zx52ld6LVS0m72+9jv+vImWq061Gy36Z7jNmZNanhCVJubNse9QfRexMn1fNfVQ2nu9/0yRafFM7Un0WxKwGHGHxjIq+ZUW6mxNrbkX7tj7pPp6lpdY4Rj/TJbeXkRXWO/TKbe8Xv5+ZBpmkmIr9vSZ7udPm6hxJO3jcSpHsa9Tb28G99ts95YkrJ0VqqWNt98EvpARVp4cqraS4FiCDY7cOXCWeI4vrqcU8OXh3EGizVOxSe6R7jcAlPF4fs00gk3sDbaLtLCrWUuuOFvnAqvlPT2Kcs+Aq1DhsW9R1Y06i7FRffbb3H2iJSek1k7Jp8sl1SyElqNNGEWuaLPrIMI5WvUZSvaltIOxsdRv8Ate6dcOom422SWOfOPdv/ACc6y2KdcE88vUhYXHFMM2Gam/aWdQNP1if9ZUp1Dr0j00ovn3WMeJZspU9Qr1Jcuz6+Ba1arUcPSDUtahVWoNjpFhy57/CaMpT0+mhGUOZYSl5beHeUoxjdfJxlh7tFfllJWxYfDoy0gDruCBcg7C/jbbwlLS1xlrFPTxahjfbCLWom1p3C5pyzsYaDUkr1+3pFru2nzNQHnG+3jtvIq3TDUW9vBvL22z9e87mrZ019lLG2++DacFXV6YZAQvAAi1rbcPVPoKbI2QUorb3YMe2DhJxl1NSdUtWTEI5rFiVYAkn6oB7vynzrjDFkb4vnbeHjPuwbSc/6JUtciW6/fJY9HGc1X7cP2uhbahYaR+dyP4vLvDHY7Zdunz4XXwKuuUFXHsscuX8TJ0qJBoNYkLUubC/Cx/KdcWynVJLOJZPOH4asjnqjEmrE4pKioy06Y4sLXPH429k4jzavVxtSajHxWMnT5dPp5QbTlLwI1VqS4usa9MsDbT5uoDYcvzkEuyjrLHdBtPGNs9xLFWS00FVLD798EjP6wqYek1NW0ioLDSRYAMOHdJuIzVmnhOtPCku592e4j0UXC+UZtZx4kyrmS16NZUVwRSfZltxB29MtT1UdTRYoJ55X1XkV1p5UWwcmuq7yMcKXy4LY3C6gLb7Nf4X9sruhz4ao43xn4EytUNa5Z2yfXRhXftK1S+ptKi4tso4/D2Trhasmp3WdXheiR5r3CLjVDosv4lVkdWiintqTM2q4OjVtYbeBveZ+glRXF9tB5zs+VsuauNs2uzmsY8cFjmlAVsTQupKMlzcEbbmx7uUu6upX6qnKbi19ZKunsdNFmH/UmZMio9jiK1HTsbMhseHdf1+4zvQV/Z9RZTjbqn8snOrn21MLM79Gj7wtG2YVTp27MG9trnR/3986qrxxCcsf4/wc2Tzo4rPf/JfTXM8QBAEAQBAEAQBAEAQBAPLQBaAewDy0A9tAEA8tAFoB7aALQDy0AWgC0A9gCAeWgC0A9gCAeWgC0AWgC0AWgHsAWgCALQBAEAQBAEAQD//Z" alt="Metropolitan Warehouse & Delivery" style="height:72px;object-fit:contain;background:#fff;padding:8px 14px;border-radius:8px;" />
+    <div style="text-align:left;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#6b8ef0;margin-bottom:6px;">Career Opportunity</div>
+      <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(22px,4vw,36px);font-weight:400;color:#fff;line-height:1.15;margin-bottom:4px;">Active Dispatch Agent</h1>
+      <p style="font-size:13px;color:rgba(255,255,255,0.55);margin:0;">Metropolitan Warehouse & Delivery</p>
+    </div>
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-steps">
+    <div class="step-tab active" id="tab-1"><span class="step-num">1</span>Overview</div>
+    <div class="step-tab" id="tab-2"><span class="step-num">2</span>Personal</div>
+    <div class="step-tab" id="tab-3"><span class="step-num">3</span>Experience</div>
+    <div class="step-tab" id="tab-4"><span class="step-num">4</span>Recording</div>
+    <div class="step-tab" id="tab-5"><span class="step-num">5</span>Typing Test</div>
+    <div class="step-tab" id="tab-6"><span class="step-num">6</span>Listening</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1: Overview -->
+  <div class="section active" id="step-1">
+    <h2 class="section-title">Role overview</h2>
+    <p class="section-subtitle">Please read this carefully before proceeding with your application.</p>
+
+    <div style="background:var(--surface-raised);border:1px solid var(--border-strong);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;">
+      <div style="background:#1a1a2e;padding:16px 20px;">
+        <p style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#6b8ef0;margin-bottom:4px;">Position</p>
+        <h3 style="font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;color:#fff;margin:0;">Active Dispatch Agent</h3>
+      </div>
+      <div style="padding:20px 24px;">
+        <p style="font-size:14px;line-height:1.75;color:var(--ink-soft);margin-bottom:20px;">This is not a passive role — you will be actively managing deliveries in real time throughout your shift. You will monitor delivery teams, support drivers, communicate with customers, and handle issues as they happen to ensure a smooth and on-time delivery experience.</p>
+
+        <div style="margin-bottom:20px;">
+          <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;">What you'll do</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Track and support multiple delivery teams throughout the day
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Communicate with drivers and customers to provide updates and resolve issues
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Ensure proof of delivery (photos, signatures) is completed correctly
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Handle delivery exceptions (no-shows, damages, wrong items, etc.)
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--accent-light);border-radius:var(--radius-sm);padding:16px 18px;border:1px solid rgba(45,91,227,0.15);">
+          <p style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;">Work expectations</p>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Manage multiple delivery teams at the same time
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Stay engaged until all assigned deliveries are completed
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);line-height:1.6;">
+              <span style="color:#2d5be3;font-weight:600;flex-shrink:0;">→</span>Multitask, make quick decisions, and follow up consistently
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <span class="required-hint">Read the overview before continuing</span>
+      <button class="btn-primary" onclick="nextStep(1)">I've read this, continue →</button>
+    </div>
+  </div>
+
+  
+  <!-- STEP 2: Personal -->
+  <div class="section" id="step-2">
+    <h2 class="section-title">Personal information</h2>
+    <p class="section-subtitle">Tell us the basics so we can get in touch with you.</p>
+    <div class="row-2">
+      <div class="field"><label>First name <span>*</span></label><input type="text" id="first-name" placeholder="Jane" /></div>
+      <div class="field"><label>Last name <span>*</span></label><input type="text" id="last-name" placeholder="Doe" /></div>
+    </div>
+    <div class="field"><label>Email address <span>*</span></label><input type="email" id="email" placeholder="jane.doe@email.com" /></div>
+    <div class="row-2">
+      <div class="field"><label>Phone number <span>*</span></label><input type="tel" id="phone" placeholder="+1 (555) 000-0000" /></div>
+      <div class="field"><label>Date of birth <span>*</span></label><input type="date" id="dob" /></div>
+    </div>
+    <div class="field"><label>City / Location <span>*</span></label><input type="text" id="location" placeholder="San Salvador, SV" /></div>
+
+    <div class="field">
+      <label>Do you have reliable transportation to and from work? <span>*</span></label>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="transport-opt-1">
+          <input type="radio" name="transport" id="transport-yes" value="Yes – Personal vehicle" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('transport',this)" />
+          Yes – I have a personal vehicle
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="transport-opt-2">
+          <input type="radio" name="transport" id="transport-no" value="No – Public transportation" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('transport',this)" />
+          No – I rely on public transportation
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Work schedule confirmation <span>*</span></label>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;line-height:1.6;">This role follows a split day-off schedule and specific working hours previously shared with you. Are you fully available and willing to work under these conditions?</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="schedule-opt-1">
+          <input type="radio" name="schedule" id="schedule-yes" value="Yes – I understand and agree" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('schedule',this)" />
+          Yes, I understand and agree
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="schedule-opt-2">
+          <input type="radio" name="schedule" id="schedule-no" value="No" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('schedule',this)" />
+          No
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Acknowledgment <span>*</span></label>
+      <div style="background:var(--accent-light);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid rgba(45,91,227,0.15);margin-bottom:12px;font-size:14px;color:var(--ink);line-height:1.7;font-style:italic;">
+        "I understand the schedule, days off, and job expectations, and I am willing to proceed under these conditions."
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="ack-opt-1">
+          <input type="radio" name="acknowledgment" id="ack-yes" value="Yes – I confirm" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('acknowledgment',this)" />
+          Yes, I confirm
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="ack-opt-2">
+          <input type="radio" name="acknowledgment" id="ack-no" value="No" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('acknowledgment',this)" />
+          No
+        </label>
+      </div>
+    </div>
+    <div class="nav-row">
+      <span class="required-hint"><span style="color:var(--accent)">*</span> Required fields</span>
+      <button class="btn-primary" onclick="nextStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  
+  <!-- STEP 3: Experience -->
+  <div class="section" id="step-3">
+    <h2 class="section-title">Experience & background</h2>
+    <p class="section-subtitle">Help us understand your professional background.</p>
+    <div class="row-2">
+      <div class="field">
+        <label>Years of relevant experience <span>*</span></label>
+        <select id="experience">
+          <option value="">Select...</option>
+          <option>Less than 1 year</option>
+          <option>1–2 years</option>
+          <option>3–5 years</option>
+          <option>6–10 years</option>
+          <option>10+ years</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Highest education level</label>
+        <select id="education">
+          <option value="">Select...</option>
+          <option>High school diploma</option>
+          <option>Associate's degree</option>
+          <option>Bachelor's degree</option>
+          <option>Master's degree</option>
+          <option>Doctorate</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Are you currently employed? <span>*</span></label>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="employed-opt-1">
+          <input type="radio" name="employed" id="employed-yes" value="Yes" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('employed',this);toggleEmployer(true)" />
+          Yes
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-weight:400;cursor:pointer;padding:12px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);transition:all 0.15s;" id="employed-opt-2">
+          <input type="radio" name="employed" id="employed-no" value="No" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;" onchange="highlightRadio('employed',this);toggleEmployer(false)" />
+          No
+        </label>
+      </div>
+    </div>
+    <div class="field" id="employer-field" style="display:none;">
+      <label>Employer name <span>*</span></label>
+      <input type="text" id="employer" placeholder="Company name" />
+    </div>
+    <div class="field"><label>Why are you interested in this role? <span>*</span></label><textarea id="motivation" placeholder="Tell us what excites you about this opportunity..."></textarea></div>
+    <div class="field"><label>What is your greatest professional achievement?</label><textarea id="achievement" placeholder="Describe a specific accomplishment you're proud of..."></textarea></div>
+    <div class="field"><label>Salary expectations <em style="font-weight:400;color:var(--ink-muted)">(optional)</em></label><input type="text" id="salary" placeholder="e.g. $40,000–$50,000 / year" /></div>
+    <div class="field"><label>Available start date</label><input type="date" id="start-date" /></div>
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goToStep(2)">← Back</button>
+      <button class="btn-primary" onclick="nextStep(3)">Continue →</button>
+    </div>
+  </div>
+
+  
+  <!-- STEP 4: Recording -->
+  <div class="section" id="step-4">
+    <h2 class="section-title">Reading assessment</h2>
+    <p class="section-subtitle">Read the passage below aloud. Click record, read clearly, then stop when finished. Once done, upload your recording directly to our Drive with one click.</p>
+    <div class="recorder-card">
+      <div class="passage-box">
+        "Effective communication is the cornerstone of every successful organization. Whether speaking with clients, collaborating with colleagues, or presenting ideas to leadership, the ability to express thoughts clearly and confidently is an invaluable skill. We look for candidates who can articulate complex information in a simple, engaging, and professional manner."
+      </div>
+      <div class="recorder-controls">
+        <button class="rec-btn btn-record" id="btn-record" onclick="startRecording()">
+          <span class="rec-dot"></span> Start recording
+        </button>
+        <button class="rec-btn btn-stop" id="btn-stop" onclick="stopRecording()" disabled>
+          &#9632; Stop
+        </button>
+        <span class="rec-status" id="rec-status">Ready to record</span>
+      </div>
+      <audio id="audio-playback" controls style="display:none"></audio>
+      <div class="download-hint" id="download-hint" style="display:none">
+        <strong>Recording saved!</strong> Your file has been downloaded to your device. Now upload it to our Drive using the button below — it only takes a few seconds.
+      </div>
+      <div id="drive-upload-section" style="display:none;margin-top:16px;">
+        <a href="https://drive.google.com/drive/folders/1Bxpij5zPvG1VVgSwV3brJJqgyM5icNy1?usp=sharing" target="_blank" id="drive-upload-btn" style="display:inline-flex;align-items:center;gap:10px;padding:13px 24px;background:#1a7a4a;color:#fff;border-radius:40px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v10M5 8l4 4 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14h12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Upload recording to our Drive
+        </a>
+        <p style="font-size:12px;color:#b45309;margin-top:10px;line-height:1.6;padding:8px 12px;background:#fef3e2;border-radius:8px;border:1px solid rgba(180,83,9,0.15);">
+          <strong>How to upload:</strong> The button opens our Drive folder. Find your downloaded recording file (check your Downloads folder) and drag it into the Drive window. Then come back here and continue.
+        </p>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="upload-confirmed" style="width:16px;height:16px;cursor:pointer;accent-color:#1a7a4a;" onchange="document.getElementById('upload-status').style.display=this.checked?'flex':'none'"/>
+          <label for="upload-confirmed" style="font-size:13px;color:#4a4a6a;cursor:pointer;">I have uploaded my recording to the Drive folder</label>
+        </div>
+        <div id="upload-status" style="display:none;margin-top:10px;align-items:center;gap:8px;padding:10px 14px;background:#e8f5ee;border-radius:8px;border:1px solid rgba(26,122,74,0.2);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="#1a7a4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-size:13px;color:#1a7a4a;font-weight:500;">Recording uploaded — thank you!</span>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goToStep(3)">← Back</button>
+      <button class="btn-primary" onclick="nextStep(4)">Continue →</button>
+    </div>
+  </div>
+
+  
+  <!-- STEP 5: Typing Test -->
+  <div class="section" id="step-5">
+    <h2 class="section-title">Typing assessment</h2>
+    <p class="section-subtitle">Type the passage below as accurately and quickly as you can. The timer starts with your first keystroke. Results are submitted automatically.</p>
+    <div class="typing-card">
+      <div class="typing-passage" id="typing-display"></div>
+      <textarea id="typing-input" placeholder="Click here and start typing..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+      <div class="typing-stats">
+        <div class="stat-card highlight"><span class="stat-val" id="stat-wpm">0</span><div class="stat-label">WPM</div></div>
+        <div class="stat-card"><span class="stat-val" id="stat-acc">—</span><div class="stat-label">Accuracy</div></div>
+        <div class="stat-card"><span class="stat-val" id="stat-time">0s</span><div class="stat-label">Time elapsed</div></div>
+      </div>
+      <div class="typing-timer">
+        <span id="timer-dot" style="width:8px;height:8px;border-radius:50%;background:var(--ink-muted);display:inline-block"></span>
+        <span id="timer-label" style="font-size:13px;color:var(--ink-soft)">Start typing to begin the test</span>
+      </div>
+      <div class="typing-result-banner" id="typing-result"></div>
+    </div>
+
+    <div style="margin-top:28px;background:#e8f5ee;border:1px solid rgba(26,122,74,0.2);border-radius:var(--radius);padding:20px 24px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v10M5 8l4 4 4-4" stroke="#1a7a4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14h12" stroke="#1a7a4a" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <p style="font-size:13px;font-weight:600;color:#1a7a4a;">Audio recording</p>
+      </div>
+      <p style="font-size:13px;color:#1a7a4a;line-height:1.6;">If you haven't uploaded your recording yet, go back to Step 3 and click <strong>"Upload recording to our Drive"</strong>.</p>
+    </div>
+
+    <div class="error-banner" id="error-banner">
+      Something went wrong submitting your application. Please try again or contact us directly.
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goToStep(4)">← Back</button>
+      <button class="btn-primary" onclick="nextStep(5)">Continue →</button>
+    </div>
+  </div>
+
+  
+  <!-- STEP 6: Active Listening -->
+  <div class="section" id="step-6">
+    <h2 class="section-title">Active listening assessment</h2>
+    <p class="section-subtitle">Listen to the scenario below carefully, then write a summary of what you heard. You may play the recording a maximum of <strong>2 times</strong>.</p>
+
+    <div style="background:var(--surface-raised);border:1px solid var(--border-strong);border-radius:var(--radius);padding:24px;margin-bottom:24px;">
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:14px 16px;background:var(--accent-light);border-radius:var(--radius-sm);border:1px solid rgba(45,91,227,0.15);">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#2d5be3" stroke-width="1.4"/><path d="M9 5v4.5l2.5 2.5" stroke="#2d5be3" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span style="font-size:13px;color:var(--accent);font-weight:500;">You have <span id="plays-remaining">2</span> play(s) remaining</span>
+      </div>
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <button id="play-btn" onclick="playScenario()" style="display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--accent);color:#fff;border:none;border-radius:40px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="5,3 15,9 5,15" fill="#fff"/></svg>
+          Play scenario
+        </button>
+        <div id="play-status" style="margin-top:12px;font-size:13px;color:var(--ink-soft);min-height:20px;"></div>
+      </div>
+
+      <div style="background:#f0f2f9;border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 16px;font-size:13px;color:var(--ink-soft);line-height:1.6;">
+        <strong style="color:var(--ink);">Instructions:</strong> Listen carefully to the full scenario. Once it finishes, write a summary below in your own words covering the key details you heard.
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Your summary <span style="font-weight:400;color:var(--ink-muted)">(write what you heard in your own words)</span></label>
+      <textarea id="listening-summary" placeholder="Write your summary here after listening to the scenario..." style="min-height:160px;" oninput="updateWordCount()"></textarea>
+      <div style="font-size:12px;color:var(--ink-muted);margin-top:6px;text-align:right;"><span id="word-count">0</span> words</div>
+    </div>
+
+    <div class="error-banner" id="error-banner-5">
+      Something went wrong submitting your application. Please try again.
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-secondary" onclick="goToStep(5)">← Back</button>
+      <button class="btn-submit" id="submit-btn" onclick="submitForm()">
+        <span id="submit-label">Submit application</span>
+        <span class="spinner" id="submit-spinner"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M7 16l6 6 12-12" stroke="#1a7a4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Application submitted!</h2>
+    <p>Thank you for applying. Your information has been recorded and our team will be in touch with you shortly.</p>
+    <div class="audio-reminder" id="audio-reminder" style="display:none">
+      <h4>Reminder about your recording</h4>
+      <p>If you were unable to attach your audio file, please email it to us directly so we can include it with your application.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbygrnzCS57VJlGam8LpOQu2ihj7U_16FGXO49DMR_Mql2j00vHXR5vo5uLRDZ0y9Ge_RQ/exec';
+  const TYPING_TEXT = "Strong teamwork and clear communication are essential in any professional environment. When individuals collaborate effectively, share ideas openly, and support one another through challenges, the entire organization benefits. We believe that every great team is built on a foundation of trust, respect, and a shared commitment to excellence.";
+
+  let currentStep = 1;
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let hasRecorded = false;
+  let typingStartTime = null;
+  let typingTimer = null;
+  let typingElapsed = 0;
+  let typingDone = false;
+  let typingWpm = 0;
+  let typingAccuracy = 0;
+
+  function goToStep(n) {
+    if (n >= currentStep) return;
+    showStep(n);
+  }
+
+  function nextStep(n) {
+    if (!validateStep(n)) return;
+    markDone(n);
+    showStep(n + 1);
+  }
+
+  function showStep(n) {
+    document.querySelector('.section.active').classList.remove('active');
+    document.getElementById('step-' + n).classList.add('active');
+    for (let i = 1; i <= 6; i++) {
+      const t = document.getElementById('tab-' + i);
+      t.classList.remove('active');
+      if (i === n) t.classList.add('active');
+    }
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (n === 5) initTypingTest();
+    if (n === 6) initListeningStep();
+  }
+
+  function markDone(n) {
+    const t = document.getElementById('tab-' + n);
+    t.classList.remove('active');
+    t.classList.add('done');
+  }
+
+  function validateStep(n) {
+    if (n === 1) { return true; }
+    if (n === 2) {
+      if (!document.getElementById('first-name').value.trim()) { alert('Please enter your first name.'); return false; }
+      if (!document.getElementById('last-name').value.trim()) { alert('Please enter your last name.'); return false; }
+      const em = document.getElementById('email').value.trim();
+      if (!em || !em.includes('@')) { alert('Please enter a valid email address.'); return false; }
+      if (!document.getElementById('phone').value.trim()) { alert('Please enter your phone number.'); return false; }
+      if (!document.getElementById('dob').value) { alert('Please enter your date of birth.'); return false; }
+      if (!document.querySelector('input[name="transport"]:checked')) { alert('Please select your transportation option.'); return false; }
+      if (!document.querySelector('input[name="schedule"]:checked')) { alert('Please confirm your schedule availability.'); return false; }
+      const ack = document.querySelector('input[name="acknowledgment"]:checked');
+      if (!ack) { alert('Please confirm the acknowledgment.'); return false; }
+      if (ack.value === 'No') { alert('You must agree to the conditions to proceed with this application.'); return false; }
+    }
+    if (n === 3) {
+      if (!document.getElementById('experience').value) { alert('Please select your years of experience.'); return false; }
+      if (!document.getElementById('motivation').value.trim()) { alert('Please tell us why you are interested in this role.'); return false; }
+      const employed = document.querySelector('input[name="employed"]:checked');
+      if (!employed) { alert('Please indicate if you are currently employed.'); return false; }
+      if (employed.value === 'Yes' && !document.getElementById('employer').value.trim()) { 
+        alert('Please enter your employer name.'); return false; 
+      }
+      if (employed.value === 'No') {
+        document.getElementById('employer').value = 'Not currently employed';
+      }
+    }
+    return true;
+  }
+
+  function highlightRadio(name, input) {
+    document.querySelectorAll('input[name="' + name + '"]').forEach(function(r) {
+      var lbl = r.closest('label');
+      if (lbl) { lbl.style.borderColor = 'rgba(26,26,46,0.2)'; lbl.style.background = ''; }
+    });
+    var selected = input.closest('label');
+    if (selected) { selected.style.borderColor = 'var(--accent)'; selected.style.background = 'var(--accent-light)'; }
+  }
+
+  function toggleEmployer(show) {
+    document.getElementById('employer-field').style.display = show ? 'block' : 'none';
+    if (!show) document.getElementById('employer').value = '';
+  }
+
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        const audio = document.getElementById('audio-playback');
+        audio.src = url;
+        audio.style.display = 'block';
+        document.getElementById('download-hint').style.display = 'block';
+        document.getElementById('drive-upload-section').style.display = 'block';
+        document.getElementById('rec-status').textContent = 'Recording complete. Review and save it above.';
+        document.getElementById('rec-status').classList.remove('recording');
+        hasRecorded = true;
+        const a = document.createElement('a');
+        a.href = url;
+        const fn = document.getElementById('first-name').value || 'candidate';
+        const ln = document.getElementById('last-name').value || '';
+        a.download = 'recording-' + fn + '-' + ln + '.webm';
+        a.click();
+        stream.getTracks().forEach(t => t.stop());
+      };
+      mediaRecorder.start();
+      document.getElementById('btn-record').disabled = true;
+      document.getElementById('btn-stop').disabled = false;
+      const s = document.getElementById('rec-status');
+      s.textContent = 'Recording in progress... speak clearly';
+      s.classList.add('recording');
+    } catch (err) {
+      alert('Microphone access denied. Please allow microphone access in your browser settings and try again.');
+    }
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      document.getElementById('btn-stop').disabled = true;
+      document.getElementById('btn-record').disabled = false;
+    }
+  }
+
+  function initTypingTest() {
+    if (typingDone) return;
+    const display = document.getElementById('typing-display');
+    if (display.innerHTML !== '') return;
+    display.innerHTML = '';
+    for (let i = 0; i < TYPING_TEXT.length; i++) {
+      const span = document.createElement('span');
+      span.className = 'char' + (i === 0 ? ' current' : '');
+      span.textContent = TYPING_TEXT[i];
+      display.appendChild(span);
+    }
+    const input = document.getElementById('typing-input');
+    input.addEventListener('input', onTypingInput);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+  }
+
+  function onTypingInput(e) {
+    if (typingDone) return;
+    const val = e.target.value;
+    if (!typingStartTime && val.length > 0) {
+      typingStartTime = Date.now();
+      startTypingTimer();
+    }
+    const chars = document.querySelectorAll('#typing-display .char');
+    let correct = 0;
+    for (let i = 0; i < chars.length; i++) {
+      chars[i].classList.remove('correct', 'incorrect', 'current');
+      if (i < val.length) {
+        if (val[i] === TYPING_TEXT[i]) { chars[i].classList.add('correct'); correct++; }
+        else chars[i].classList.add('incorrect');
+      } else if (i === val.length) {
+        chars[i].classList.add('current');
+      }
+    }
+    const elapsed = (Date.now() - typingStartTime) / 1000;
+    const words = val.trim().split(/\s+/).filter(w => w.length > 0).length;
+    typingWpm = elapsed > 0 ? Math.round((words / elapsed) * 60) : 0;
+    typingAccuracy = val.length > 0 ? Math.round((correct / val.length) * 100) : 0;
+    document.getElementById('stat-wpm').textContent = typingWpm;
+    document.getElementById('stat-acc').textContent = val.length > 0 ? typingAccuracy + '%' : '—';
+    if (val.length >= TYPING_TEXT.length) finishTypingTest();
+  }
+
+  function startTypingTimer() {
+    const dot = document.getElementById('timer-dot');
+    const label = document.getElementById('timer-label');
+    dot.style.background = 'var(--danger)';
+    dot.classList.add('timer-pulse');
+    typingTimer = setInterval(() => {
+      typingElapsed = Math.round((Date.now() - typingStartTime) / 1000);
+      document.getElementById('stat-time').textContent = typingElapsed + 's';
+      label.textContent = 'Test in progress — ' + typingElapsed + 's elapsed';
+    }, 500);
+  }
+
+  function finishTypingTest() {
+    clearInterval(typingTimer);
+    typingDone = true;
+    document.getElementById('typing-input').disabled = true;
+    document.getElementById('timer-dot').style.background = 'var(--success)';
+    document.getElementById('timer-dot').classList.remove('timer-pulse');
+    document.getElementById('timer-label').textContent = 'Test complete!';
+    const banner = document.getElementById('typing-result');
+    banner.classList.add('show');
+    if (typingWpm >= 60 && typingAccuracy >= 90) {
+      banner.className = 'typing-result-banner show great';
+      banner.textContent = 'Excellent! ' + typingWpm + ' WPM at ' + typingAccuracy + '% accuracy.';
+    } else if (typingWpm >= 40 && typingAccuracy >= 80) {
+      banner.className = 'typing-result-banner show good';
+      banner.textContent = 'Good result: ' + typingWpm + ' WPM at ' + typingAccuracy + '% accuracy.';
+    } else {
+      banner.className = 'typing-result-banner show average';
+      banner.textContent = 'Completed: ' + typingWpm + ' WPM at ' + typingAccuracy + '% accuracy.';
+    }
+  }
+
+  async function submitForm() {
+    const btn = document.getElementById('submit-btn');
+    const label = document.getElementById('submit-label');
+    const spinner = document.getElementById('submit-spinner');
+    const errorBanner = document.getElementById('error-banner-5') || document.getElementById('error-banner');
+
+    btn.disabled = true;
+    label.style.display = 'none';
+    spinner.style.display = 'inline-block';
+    errorBanner.classList.remove('show');
+
+    const uploadConfirmed = document.getElementById('upload-confirmed');
+    const audioNote = uploadConfirmed && uploadConfirmed.checked
+      ? 'Recording uploaded to Google Drive by candidate'
+      : (hasRecorded ? 'Candidate recorded but may not have uploaded to Drive' : 'No recording submitted');
+
+    const payload = {
+      firstName: document.getElementById('first-name').value.trim(),
+      lastName: document.getElementById('last-name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      dob: document.getElementById('dob').value,
+      location: document.getElementById('location').value.trim(),
+      position: 'Active Dispatch Agent',
+      transportation: (document.querySelector('input[name="transport"]:checked') || {}).value || '',
+      scheduleConfirm: (document.querySelector('input[name="schedule"]:checked') || {}).value || '',
+      acknowledgment: (document.querySelector('input[name="acknowledgment"]:checked') || {}).value || '',
+      experience: document.getElementById('experience').value,
+      education: document.getElementById('education').value,
+      employer: document.getElementById('employer').value.trim(),
+      motivation: document.getElementById('motivation').value.trim(),
+      achievement: document.getElementById('achievement').value.trim(),
+      salary: document.getElementById('salary').value.trim(),
+      startDate: document.getElementById('start-date').value,
+      wpm: typingWpm,
+      accuracy: typingAccuracy + '%',
+      timeSeconds: typingElapsed,
+      audioNote: audioNote,
+      listeningSummary: document.getElementById('listening-summary') ? document.getElementById('listening-summary').value.trim() : ''
+    };
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      document.querySelector('.section.active').classList.remove('active');
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById('tab-' + i).classList.remove('active');
+        document.getElementById('tab-' + i).classList.add('done');
+      }
+      document.getElementById('success-screen').classList.add('show');
+      if (hasRecorded) {
+        var confirmed = document.getElementById('upload-confirmed');
+        if (!confirmed || !confirmed.checked) {
+          document.getElementById('audio-reminder').style.display = 'block';
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      errorBanner.classList.add('show');
+      btn.disabled = false;
+      label.style.display = 'inline';
+      spinner.style.display = 'none';
+    }
+  }
+
+  var playsRemaining = 2;
+  var isPlaying = false;
+  var currentUtterance = null;
+
+  var SCENARIO_TEXT = "Hello, this is Carlos from the delivery team. I am calling to report an issue with order number 4-7-2-5. We attempted to deliver a bed frame to the customer today, but unfortunately we found that the bed frame arrived damaged. There is a visible crack on the left side panel, and it looks like it happened during transit. Additionally, one of the component bags was missing screws — specifically the hardware needed to assemble the headboard. The customer was understandably upset. We did take pictures of the damaged item at the scene to document everything, however we were unable to upload the photos to the system as the app was not working at the time. We currently have the damaged item back in the truck. Please advise on how to proceed — whether we should return it to the warehouse, arrange a replacement delivery, or wait for further instructions. You can reach me at extension 2-2-4. Thank you.";
+
+  function initListeningStep() {
+    playsRemaining = 2;
+    document.getElementById('plays-remaining').textContent = 2;
+    document.getElementById('play-status').textContent = '';
+    var btn = document.getElementById('play-btn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+
+  function playScenario() {
+    if (playsRemaining <= 0 || isPlaying) return;
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      currentUtterance = new SpeechSynthesisUtterance(SCENARIO_TEXT);
+      currentUtterance.rate = 0.92;
+      currentUtterance.pitch = 1;
+      currentUtterance.volume = 1;
+
+      // Try to use a natural voice
+      var voices = window.speechSynthesis.getVoices();
+      var preferred = voices.find(v => v.name.includes('Google US English') || v.name.includes('Alex') || v.name.includes('Daniel'));
+      if (preferred) currentUtterance.voice = preferred;
+
+      playsRemaining--;
+      isPlaying = true;
+      document.getElementById('plays-remaining').textContent = playsRemaining;
+
+      var btn = document.getElementById('play-btn');
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="4" y="3" width="3" height="12" rx="1" fill="#fff"/><rect x="11" y="3" width="3" height="12" rx="1" fill="#fff"/></svg> Playing...';
+      btn.style.background = 'var(--ink-soft)';
+      btn.disabled = true;
+
+      document.getElementById('play-status').textContent = 'Scenario is playing — listen carefully...';
+
+      currentUtterance.onend = function() {
+        isPlaying = false;
+        document.getElementById('play-status').textContent = playsRemaining > 0
+          ? 'Finished. You have ' + playsRemaining + ' play(s) remaining.'
+          : 'Finished. You have used all your plays. Please write your summary below.';
+
+        if (playsRemaining > 0) {
+          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polygon points="5,3 15,9 5,15" fill="#fff"/></svg> Play again';
+          btn.style.background = 'var(--accent)';
+          btn.disabled = false;
+        } else {
+          btn.innerHTML = 'No plays remaining';
+          btn.style.background = 'var(--ink-muted)';
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
+        }
+        document.getElementById('listening-summary').focus();
+      };
+
+      window.speechSynthesis.speak(currentUtterance);
+    } else {
+      document.getElementById('play-status').textContent = 'Sorry, your browser does not support audio playback. Please use Chrome or Edge.';
+    }
+  }
+
+  function updateWordCount() {
+    var text = document.getElementById('listening-summary').value.trim();
+    var count = text === '' ? 0 : text.split(/\s+/).length;
+    document.getElementById('word-count').textContent = count;
+  }
+</script>
+</body>
+</html>
